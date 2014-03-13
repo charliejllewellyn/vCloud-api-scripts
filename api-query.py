@@ -4,7 +4,11 @@ import urllib.request, base64
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 import xml.etree.ElementTree as etree
-password=""
+
+username='charles.llewellyn@eduserv.org.uk@sa.eduserv.org.uk'
+password=input('Please enter your password:')
+vcloud_url='https://compute.cloud.eduserv.org.uk/api/sessions'
+api_version='5.1'
 
 def login( url, username, password, version):
     request = urllib.request.Request(url)
@@ -50,12 +54,20 @@ def queryAPI(url, auth, element, type):
         #item=tree.findall('.//{http://www.vmware.com/vcloud/v1.5}'+type+'[@name=\'sa.eduserv.org.uk\']')
         array=list()
         item = tree.findall('.//{http://www.vmware.com/vcloud/v1.5}'+element)
-        type = "application/vnd.vmware.vcloud."+type+"+xml"
+        vcd_type = "application/vnd.vmware.vcloud."+type+"+xml"
         for child in item:
-
-            if child.get("type").lower() == type.lower():
-                vcd = make_vcd_org_object(child.get("href"), child.get("type"), child.get("name"))
-                array.append(vcd)
+            if child.get("type").lower() == vcd_type.lower():
+                if type == "org":
+                    vcd = make_vcd_org_object(child.get("href"), child.get("type"), child.get("name"))
+                    array.append(vcd)
+            if child.get("type").lower() == vcd_type.lower():
+                if type == "vdc":
+                    vcd = make_vcd_vdc_object(child.get("href"), child.get("type"), child.get("name"))
+                    array.append(vcd)
+            if child.get("type").lower() == vcd_type.lower():
+                if type == "vApp":
+                    vcd = make_vcd_vapp_object(child.get("href"), child.get("type"), child.get("name"))
+                    array.append(vcd)
         return(array)
 
 class vcd_org_object(object):
@@ -69,6 +81,30 @@ def make_vcd_org_object(href, type, name):
     vcd_org.type = type
     vcd_org.name = name
     return vcd_org
+
+class vcd_vdc_object(object):
+    href = ""
+    type = ""
+    name = ""
+
+def make_vcd_vdc_object(href, type, name):
+    vcd_vdc = vcd_vdc_object()
+    vcd_vdc.href = href
+    vcd_vdc.type = type
+    vcd_vdc.name = name
+    return vcd_vdc
+
+class vcd_vapp_object(object):
+    href = ""
+    type = ""
+    name = ""
+
+def make_vcd_vapp_object(href, type, name):
+    vcd_vapp = vcd_vapp_object()
+    vcd_vapp.href = href
+    vcd_vapp.type = type
+    vcd_vapp.name = name
+    return vcd_vapp
 
 def returnVDCs(auth):
     org=queryAPI('https://compute.cloud.eduserv.org.uk/api/org', auth, "Org", "org")
@@ -89,7 +125,7 @@ def returnvApps(auth):
         return(vApp)
 
 def main():
-    auth=login('https://compute.cloud.eduserv.org.uk/api/sessions', 'charles.llewellyn@eduserv.org.uk@sa.eduserv.org.uk',password, '5.1')
+    auth=login(vcloud_url, username,password, api_version)
     returnvApps(auth)
 
 main()
