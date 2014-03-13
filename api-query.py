@@ -4,6 +4,7 @@ import urllib.request, base64
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 import xml.etree.ElementTree as etree
+password=""
 
 def login( url, username, password, version):
     request = urllib.request.Request(url)
@@ -88,7 +89,7 @@ def returnvApps(auth):
         return(vApp)
 
 def main():
-    auth=login('https://compute.cloud.eduserv.org.uk/api/sessions', 'charles.llewellyn@eduserv.org.uk@sa.eduserv.org.uk','r3m0t3!0g0n', '5.1')
+    auth=login('https://compute.cloud.eduserv.org.uk/api/sessions', 'charles.llewellyn@eduserv.org.uk@sa.eduserv.org.uk',password, '5.1')
     returnvApps(auth)
 
 main()
