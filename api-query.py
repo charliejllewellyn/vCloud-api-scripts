@@ -53,21 +53,21 @@ def queryAPI(url, auth, element, type):
         for child in item:
 
             if child.get("type").lower() == type.lower():
-                vcd = make_vcd(child.get("href"), child.get("type"), child.get("name"))
+                vcd = make_vcd_org_object(child.get("href"), child.get("type"), child.get("name"))
                 array.append(vcd)
         return(array)
 
-class vcd_object(object):
+class vcd_org_object(object):
     href = ""
     type = ""
     name = ""
 
-def make_vcd(href, type, name):
-    vdc = vcd_object()
-    vdc.href = href
-    vdc.type = type
-    vdc.name = name
-    return vdc
+def make_vcd_org_object(href, type, name):
+    vcd_org = vcd_org_object()
+    vcd_org.href = href
+    vcd_org.type = type
+    vcd_org.name = name
+    return vcd_org
 
 def returnVDCs(auth):
     org=queryAPI('https://compute.cloud.eduserv.org.uk/api/org', auth, "Org", "org")
