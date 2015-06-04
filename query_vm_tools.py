@@ -79,7 +79,6 @@ def queryXml(xmlString, path=None, attrib=None, attribVal=None ):
 token = vcdLogin(vCloudUrl, user, pwd)
 # Get VM List
 xmlString = queryVcd("https://api.vcd.portal.skyscapecloud.com/api/query?type=vm&filter=(status==POWERED_ON;vmToolsVersion==0)", token,  method="GET", headers=setHeaders(token)).text
-print(xmlString)
 vmList = queryXml(xmlString, 'vcloud:VMRecord')
 
 for vm in vmList:
