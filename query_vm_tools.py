@@ -85,3 +85,4 @@ vmList = queryXml(xmlString, 'vcloud:VMRecord')
 for vm in vmList:
     print vm.get('name') + " : No tools installed"
 
+vcdLogout(vCloudUrl, token)
