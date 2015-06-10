@@ -17,7 +17,7 @@ if os.name == "nt":
     pwd = getpass.win_getpass()
 else:
     pwd = getpass.getpass(prompt='Please enter your password:')
-    
+
 headers = { 'Accept': 'application/*+xml;version=5.5'}
 exitFlag = 0
 
@@ -85,3 +85,5 @@ edgeHref = queryXml(xmlString, 'vcloud:EdgeGatewayRecord')[0].get("href")
 edgeSyslogSet = edgeHref + "/action/syncSyslogServerSettings"
 # POST to endpoint to refresh syslog settings
 print(queryVcd(edgeSyslogSet, token, method="POST", headers=setHeaders(token)).text)
+# Logout of vCloud
+vcdLogout(vCloudUrl, token)
