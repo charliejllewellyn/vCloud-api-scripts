@@ -78,10 +78,13 @@ def queryXml(xmlString, path=None, attrib=None, attribVal=None ):
 # Login to vCloud
 token = vcdLogin(vCloudUrl, user, pwd)
 # Get VM List
-xmlString = queryVcd("https://api.vcd.portal.skyscapecloud.com/api/query?type=vm&filter=(status==POWERED_ON;vmToolsVersion==0)", token,  method="GET", headers=setHeaders(token)).text
+xmlString = queryVcd("https://api.vcd.portal.skyscapecloud.com/api/query?type=vm", token,  method="GET", headers=setHeaders(token)).text
 vmList = queryXml(xmlString, 'vcloud:VMRecord')
 
 for vm in vmList:
-    print vm.get('name') + " : No tools installed"
+    if vm.get('vmToolsVersion') != '0':
+        print vm.get('name') + "\t\t\t : Version: " + vm.get('vmToolsVersion')
+    else:
+        print vm.get('name') + "\t\t\t : Version: No tools installed"
 
 vcdLogout(vCloudUrl, token)
